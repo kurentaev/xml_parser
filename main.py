@@ -162,28 +162,32 @@ def write_to_db(individual, entity, engine):
 
     # Заполнение таблицы данными
     for item in individual:
-        query = db.insert(individuals).values(dataid=item[0],
-                                              versionnum=item[1],
-                                              name_original_script=item[2],
-                                              first_name=item[3],
-                                              title=item[4],
-                                              second_name=item[5],
-                                              third_name=item[6],
-                                              un_list_type=item[7],
-                                              reference_number=item[8],
-                                              listed_on=item[9],
-                                              comments1=item[10],
-                                              designation=item[11],
-                                              nationality=item[12],
-                                              list_type=item[13],
-                                              last_day_updated=item[14],
-                                              city=item[15],
-                                              state_province=item[16],
-                                              country=item[17],
-                                              from_year=item[18],
-                                              to_year=item[19],
-                                              )
-        connection.execute(query)
+        select_query = db.select(individuals).where(individuals.c.dataid == item[0])
+        result = connection.execute(select_query)
+        record_exists = result.fetchone() is not None
+        if not record_exists:
+            query = db.insert(individuals).values(dataid=item[0],
+                                                  versionnum=item[1],
+                                                  name_original_script=item[2],
+                                                  first_name=item[3],
+                                                  title=item[4],
+                                                  second_name=item[5],
+                                                  third_name=item[6],
+                                                  un_list_type=item[7],
+                                                  reference_number=item[8],
+                                                  listed_on=item[9],
+                                                  comments1=item[10],
+                                                  designation=item[11],
+                                                  nationality=item[12],
+                                                  list_type=item[13],
+                                                  last_day_updated=item[14],
+                                                  city=item[15],
+                                                  state_province=item[16],
+                                                  country=item[17],
+                                                  from_year=item[18],
+                                                  to_year=item[19],
+                                                  )
+            connection.execute(query)
     connection.commit()
 
     # Создание таблицы
@@ -205,20 +209,24 @@ def write_to_db(individual, entity, engine):
 
     # Заполнение таблицы данными
     for item in entity:
-        query = db.insert(entities).values(dataid=item[0],
-                                           versionnum=item[1],
-                                           first_name=item[2],
-                                           un_list_type=item[3],
-                                           reference_number=item[4],
-                                           listed_on=item[5],
-                                           comments1=item[6],
-                                           name_original_script=item[7],
-                                           list_type=item[8],
-                                           last_day_updated=item[9],
-                                           entity_alias=item[10],
-                                           entity_address=item[11],
-                                           )
-        connection.execute(query)
+        select_query = db.select(entities).where(entities.c.dataid == item[0])
+        result = connection.execute(select_query)
+        record_exists = result.fetchone() is not None
+        if not record_exists:
+            query = db.insert(entities).values(dataid=item[0],
+                                               versionnum=item[1],
+                                               first_name=item[2],
+                                               un_list_type=item[3],
+                                               reference_number=item[4],
+                                               listed_on=item[5],
+                                               comments1=item[6],
+                                               name_original_script=item[7],
+                                               list_type=item[8],
+                                               last_day_updated=item[9],
+                                               entity_alias=item[10],
+                                               entity_address=item[11],
+                                               )
+            connection.execute(query)
     connection.commit()
     connection.close()
 
